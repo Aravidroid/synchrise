@@ -12,9 +12,15 @@ export default function TasksPage() {
     setTasks(data);
   }
 
-  useEffect(() => {
+useEffect(() => {
+  loadTasks();
+
+  const interval = setInterval(() => {
     loadTasks();
-  }, []);
+  }, 3000);
+
+  return () => clearInterval(interval);
+}, []);
 
   return (
     <main className="min-h-screen bg-black text-white p-8">

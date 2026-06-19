@@ -31,9 +31,15 @@ export default function Dashboard() {
     }
   }
 
-  useEffect(() => {
+useEffect(() => {
+  loadEvents();
+
+  const interval = setInterval(() => {
     loadEvents();
-  }, []);
+  }, 3000);
+
+  return () => clearInterval(interval);
+}, []);
 
   function toggleTool(tool) {
     if (selectedTools.includes(tool)) {
