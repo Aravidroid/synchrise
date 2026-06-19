@@ -39,9 +39,12 @@ export default function TasksPage() {
                 </p>
               </div>
 
-              <span className="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full">
-                {task.status}
-              </span>
+  <span className={`px-3 py-1 rounded-full ${
+      task.status === "Completed"? "bg-green-500/20 text-green-400": "bg-yellow-500/20 text-yellow-400"
+  }`}
+>
+  {task.status}
+</span>
             </div>
           </div>
         ))}
