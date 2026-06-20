@@ -1,12 +1,13 @@
 "use client";
-
 import { useEffect, useState } from "react";
+import Sidebar from "@/components/Sidebar";
 
 export default function Dashboard() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [events, setEvents] = useState([]);
   const [selectedTools, setSelectedTools] = useState([]);
+  const [compliance, setCompliance] = useState(null);
 
   const tools = [
     "Slack",
@@ -16,26 +17,35 @@ export default function Dashboard() {
     "Jira",
   ];
 
-  async function loadEvents() {
-    try {
-      const response = await fetch("/api/offboard");
-      const data = await response.json();
+async function loadEvents() {
+  try {
+    const response = await fetch("/api/offboard");
+    const data = await response.json();
 
-      setEvents(
-        data.sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        )
-      );
-    } catch (error) {
-      console.error(error);
+    if (!Array.isArray(data)) {
+      console.error("API returned:", data);
+      return;
     }
+
+    setEvents(
+      data.sort(
+        (a, b) =>
+          new Date(b.createdAt) -
+          new Date(a.createdAt)
+      )
+    );
+  } catch (error) {
+    console.error(error);
   }
+}
 
 useEffect(() => {
   loadEvents();
+  loadCompliance();
 
   const interval = setInterval(() => {
     loadEvents();
+    loadCompliance();
   }, 3000);
 
   return () => clearInterval(interval);
@@ -79,6 +89,7 @@ useEffect(() => {
 
       if (data.success) {
         await loadEvents();
+        await loadCompliance();
 
         setName("");
         setEmail("");
@@ -88,6 +99,13 @@ useEffect(() => {
       console.error(error);
     }
   }
+
+  async function loadCompliance() {
+  const response = await fetch("/api/compliance");
+  const data = await response.json();
+
+  setCompliance(data);
+}
 
   const totalOffboardings = events.length;
 
@@ -100,7 +118,10 @@ useEffect(() => {
   ).length;
 
   return (
-    <main className="min-h-screen bg-black text-white bg-[radial-gradient(circle_at_top,#1a1a1a_0%,#000_50%)]">
+  <div className="flex bg-black text-white">
+    <Sidebar />
+
+    <main className="flex-1 min-h-screen bg-[radial-gradient(circle_at_top,#1a1a1a_0%,#000_50%)]">
       {/* Header */}
 <div className="border-b border-zinc-800 px-8 py-5 flex justify-between items-center">
   <div>
@@ -113,12 +134,7 @@ useEffect(() => {
     </p>
   </div>
 
-  <a
-    href="/tasks"
-    className="px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg hover:bg-zinc-700 transition"
-  >
-    View Tasks
-  </a>
+
 </div>
 
       <div className="p-8 max-w-7xl mx-auto">
@@ -135,7 +151,7 @@ useEffect(() => {
 
           <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
             <h2 className="text-zinc-400">
-              Pending Tasks
+              Pending Offboardings
             </h2>
             <p className="text-4xl font-bold mt-2">
               {pendingTasks}
@@ -272,5 +288,6 @@ useEffect(() => {
         </div>
       </div>
     </main>
+    </div>
   );
 }

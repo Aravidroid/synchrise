@@ -16,7 +16,7 @@ export async function POST(request) {
       createdAt: new Date().toISOString(),
     };
 
-    // Save event
+    // Save Event
     await db.send(
       new PutCommand({
         TableName: process.env.DYNAMODB_EVENTS_TABLE,
@@ -24,7 +24,7 @@ export async function POST(request) {
       })
     );
 
-    // Create one task per tool
+    // Create Tasks
     for (const tool of body.tools || []) {
       await db.send(
         new PutCommand({
@@ -32,6 +32,10 @@ export async function POST(request) {
           Item: {
             eventId,
             taskId: crypto.randomUUID(),
+
+            employeeName: body.employeeName,
+            employeeEmail: body.employeeEmail,
+
             tool,
             status: "Pending",
             createdAt: new Date().toISOString(),
@@ -44,6 +48,7 @@ export async function POST(request) {
       success: true,
       event,
     });
+
   } catch (error) {
     console.error(error);
 
@@ -68,7 +73,10 @@ export async function GET() {
     );
 
     return Response.json(result.Items || []);
+
   } catch (error) {
+    console.error(error);
+
     return Response.json(
       {
         success: false,

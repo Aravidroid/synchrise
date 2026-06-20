@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Sidebar from "@/components/Sidebar";
 
 export default function TasksPage() {
   const [tasks, setTasks] = useState([]);
@@ -23,7 +24,10 @@ useEffect(() => {
 }, []);
 
   return (
-    <main className="min-h-screen bg-black text-white p-8">
+    <div className="flex bg-black text-white">
+      <Sidebar />
+
+      <main className="flex-1 min-h-screen bg-[radial-gradient(circle_at_top,#1a1a1a_0%,#000_50%)] p-8">
       <h1 className="text-4xl font-bold mb-8">
         Offboarding Tasks
       </h1>
@@ -55,6 +59,7 @@ useEffect(() => {
           </div>
         ))}
       </div>
-    </main>
+      </main>
+    </div>
   );
 }
