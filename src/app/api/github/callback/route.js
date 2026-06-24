@@ -11,28 +11,47 @@ export async function GET(request) {
   if (!installationId) {
     return NextResponse.json(
       {
+        success: false,
         error: "Missing installation ID",
       },
       { status: 400 }
     );
   }
 
-  await db.send(
-    new PutCommand({
-      TableName: "synchrise-integrations",
-      Item: {
-        integrationId: "github",
-        installationId,
-        connected: true,
-        connectedAt: new Date().toISOString(),
-      },
-    })
-  );
+  try {
+    await db.send(
+      new PutCommand({
+        TableName: "synchrise-integrations",
+        Item: {
+          integrationId: "github",
+          installationId,
+          connected: true,
+          connectedAt: new Date().toISOString(),
+        },
+      })
+    );
 
-  return NextResponse.redirect(
-    new URL(
-      "/dashboard/integrations",
-      request.url
-    )
-  );
+    return NextResponse.json({
+      success: true,
+      message:
+        "GitHub installation saved successfully",
+      installationId,
+    });
+
+  } catch (error) {
+    console.error(
+      "GitHub callback error:",
+      error
+    );
+
+    return NextResponse.json(
+      {
+        success: false,
+        error:
+          error.message ||
+          "Unknown error occurred",
+      },
+      { status: 500 }
+    );
+  }
 }
