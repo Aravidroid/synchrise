@@ -13,11 +13,20 @@ export async function GET() {
 
     return Response.json({
       success: true,
+      repositoryCount:
+        response.data.total_count,
       repositories:
-        response.data.repositories,
+        response.data.repositories.map(
+          (repo) => ({
+            name: repo.name,
+            private: repo.private,
+          })
+        ),
     });
 
   } catch (error) {
+    console.error(error);
+
     return Response.json(
       {
         success: false,
