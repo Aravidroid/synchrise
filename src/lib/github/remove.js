@@ -8,11 +8,20 @@ export async function remove(username) {
   const octokit = await getInstallationOctokit();
 
   // Get installation details
-  const installation = await octokit.request(
-    "GET /installation"
-  );
+const repos = await octokit.request(
+  "GET /installation/repositories"
+);
 
-  const org = installation.data.account.login;
+  if (repos.data.repositories.length === 0) {
+    throw new Error(
+      "No repositories found for this installation. Add at least one repository to the GitHub App installation."
+  );
+}
+
+  const org =
+    repos.data.repositories[0].owner.login;
+
+  console.log("Organization:", org);
 
   const result = {
     organization: org,
