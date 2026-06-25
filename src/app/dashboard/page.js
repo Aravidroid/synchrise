@@ -5,6 +5,7 @@ import Sidebar from "@/components/Sidebar";
 export default function Dashboard() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [githubUsername, setGithubUsername] = useState("");
   const [events, setEvents] = useState([]);
   const [selectedTools, setSelectedTools] = useState([]);
   const [compliance, setCompliance] = useState(null);
@@ -80,7 +81,7 @@ useEffect(() => {
         },
         body: JSON.stringify({
           employeeName: name,
-          employeeEmail: email,
+          employeeEmail: email,githubUsername,
           tools: selectedTools,
         }),
       });
@@ -93,6 +94,7 @@ useEffect(() => {
 
         setName("");
         setEmail("");
+        setGithubUsername("");
         setSelectedTools([]);
       }
     } catch (error) {
@@ -194,6 +196,13 @@ useEffect(() => {
               }
               className="bg-zinc-800 border border-zinc-700 rounded-lg p-3 text-white placeholder-zinc-500 outline-none focus:border-white"
             />
+          <input
+          type="text"
+          placeholder="GitHub Username (Optional)"
+          value={githubUsername}
+          onChange={(e) => setGithubUsername(e.target.value)}
+          className="bg-zinc-800 border border-zinc-700 rounded-lg p-3 text-white placeholder-zinc-500 outline-none focus:border-white"
+          />
           </div>
 
           {/* Tool Selection */}

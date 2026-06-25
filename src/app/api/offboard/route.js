@@ -11,6 +11,7 @@ export async function POST(request) {
       id: eventId,
       employeeName: body.employeeName,
       employeeEmail: body.employeeEmail,
+      githubUsername: body.githubUsername || "",
       tools: body.tools || [],
       status: "Pending",
       createdAt: new Date().toISOString(),
@@ -35,6 +36,7 @@ export async function POST(request) {
 
             employeeName: body.employeeName,
             employeeEmail: body.employeeEmail,
+            githubUsername: body.githubUsername || "",
 
             tool,
             status: "Pending",
