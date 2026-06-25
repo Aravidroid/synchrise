@@ -74,12 +74,14 @@ if (!username) {
 
     return Response.json(
       {
-        success: false,
-        error: error.message || "Unknown error",
-      },
-      {
-        status: 500,
-      }
-    );
-  }
+      success: false,
+      status: error.status,
+      message: error.message,
+      github: error.response?.data,
+    },
+    {
+      status: 500,
+    }
+  );
+}
 }

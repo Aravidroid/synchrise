@@ -38,13 +38,19 @@ export async function remove(username) {
     });
 
   } catch (error) {
+  console.error("GitHub Remove Error");
+  console.error("Status:", error.status);
+  console.error("Message:", error.message);
+  console.error("Response:", error.response?.data);
 
-    result.actions.push({
-      action: "Organization Membership",
-      success: false,
-      error: error.message,
-    });
-  }
+  result.actions.push({
+    action: "Organization Membership",
+    success: false,
+    status: error.status,
+    error: error.message,
+    details: error.response?.data,
+  });
+}
 
   // ----------------------------------------------------
   // STEP 2 - Remove Repository Access
