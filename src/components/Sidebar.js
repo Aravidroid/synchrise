@@ -9,10 +9,10 @@ export default function Sidebar() {
   const links = [
     { name: "Dashboard", href: "/dashboard" },
     { name: "Tasks", href: "/tasks" },
-    { name: "Analytics", href: "/analytics" },
     { name: "Audit Logs", href: "/audit" },
-    {name: "Access Reconciliation",href: "/dashboard/reconciliation"},
-    {name: "Simulations",href: "/dashboard/simulation"}
+    { name: "Access Reconciliation", href: "/dashboard/reconciliation" },
+    { name: "Impact Analysis", href: "/dashboard/simulation" },
+    { name: "Integrations", href: "/dashboard/integrations" }
   ];
 
   return (
