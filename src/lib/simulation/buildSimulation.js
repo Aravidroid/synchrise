@@ -55,6 +55,8 @@ export function buildSimulation(event, tasks) {
 
     employeeEmail: event.employeeEmail,
 
+    githubUsername: event.githubUsername,
+
     eventId: event.id,
 
     providers: [...new Set(tasks.map(t => t.tool))],

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
+import OffboardingSimulator from "@/components/OffboardingSimulator";
 
 export default function Dashboard() {
   const [name, setName] = useState("");
@@ -9,6 +10,7 @@ export default function Dashboard() {
   const [events, setEvents] = useState([]);
   const [selectedTools, setSelectedTools] = useState([]);
   const [compliance, setCompliance] = useState(null);
+  const [simulatorData, setSimulatorData] = useState(null); // { employeeName, tools }
 
   const tools = [
     "Slack",
@@ -89,6 +91,9 @@ useEffect(() => {
       const data = await response.json();
 
       if (data.success) {
+        // Show the animated offboarding simulator overlay
+        setSimulatorData({ employeeName: name, tools: selectedTools });
+
         await loadEvents();
         await loadCompliance();
 
@@ -297,6 +302,14 @@ useEffect(() => {
         </div>
       </div>
     </main>
+        {/* Offboarding Simulator Overlay */}
+        {simulatorData && (
+          <OffboardingSimulator
+            employeeName={simulatorData.employeeName}
+            tools={simulatorData.tools}
+            onDone={() => setSimulatorData(null)}
+          />
+        )}
     </div>
   );
 }
