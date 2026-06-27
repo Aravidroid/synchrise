@@ -1,4 +1,5 @@
 import { getInstallationOctokit } from "./auth";
+import { verifyRemoval } from "./verifyRemoval";
 
 export async function remove(username) {
   if (!username) {
@@ -41,9 +42,12 @@ const repos = await octokit.request(
       }
     );
 
+    const verification =
+      await verifyRemoval(username, org);
+
     result.actions.push({
       action: "Organization Membership",
-      success: true,
+      success: true, verification,
     });
 
   } catch (error) {

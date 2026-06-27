@@ -11,6 +11,8 @@ export default function Sidebar() {
     { name: "Tasks", href: "/tasks" },
     { name: "Analytics", href: "/analytics" },
     { name: "Audit Logs", href: "/audit" },
+    {name: "Access Reconciliation",href: "/dashboard/reconciliation"},
+    {name: "Simulations",href: "/dashboard/simulation"}
   ];
 
   return (
